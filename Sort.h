@@ -1,3 +1,8 @@
+/*
+	Cesar Camarena
+	Jignesh Patel
+	Lab 9
+*/
 #if !defined (SORT_H)
 #define SORT_H
 
@@ -35,16 +40,23 @@ T** Sort<T>::quickSort(T** items, int num_items, int (*compare) (T* one, T* two)
    //DO THIS
    //create a new array that will be sorted and returned
    //this is in case the original, unsorted array is also needed
-
-
-
-
-
-
-
-
-
-
+   
+   T** sorted = new T*[num_items];
+   
+   for (int i = 0; i < num_items; i++)
+   {
+	   
+	   sorted[i] = items[i];
+	   
+   }
+   
+   
+   _quickSort(sorted, 0, num_items - 1, compare);
+   
+   
+   
+   return sorted;
+   
 }
 
 template < class T >
@@ -56,16 +68,13 @@ void Sort<T>::_quickSort(T** items, int first, int last, int (*compare) (T* one,
    //make the necessary partition and recursive calls for quick sort
    if (first < last)
    {
-
-
-
-
-
-
-
-
-
-
+		pivotIndex = partition(items, first, last, compare);
+		
+		
+		_quickSort(items, first, pivotIndex - 1, compare);
+		
+		
+		_quickSort(items, pivotIndex + 1, last, compare);
 
    }  
 }  
@@ -81,23 +90,39 @@ int Sort<T>::partition(T** items, int first, int last, int (*compare) (T* one, T
 
    //initially, choosePivot does nothing           
    choosePivot(items, first, last); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     
+   
+   T* pivot = items[first];
+   
+   int S1 = first;
+   
+   
+   for (int i = first; i <= last; i++)
+   {
+	   //Comparing the item with the pivot
+	   if ((*compare) (items[i], pivot) < 0)
+	   {
+		   S1++;
+		   
+		   
+		   //This is where you swap whatever you're pointing to with S1
+		   temp = items[i];
+		   
+		   items[i] = items[S1];
+		   
+		   items[S1] = temp;
+	   }
+   }
+   
+   //This is where you swap the S1 with your pivot (or in this case first)
+   temp = items[S1];
+   
+   items[S1] = items[first];
+   
+   items[first] = temp;
+   
+   
+   return S1;
+   
 }
 
 template < class T >
@@ -107,12 +132,17 @@ void Sort<T>::choosePivot(T** items, int first, int last)
    //find a better item to be the partition than simply using the item in the first index
    //you will need to swap
 
-
-
-
-
-
-
+   T* temp;
+   
+   
+   int mid = first + (last - first)/2;
+   
+   //You swap the mid point with the pivot in case there is a worst case
+   temp = items[mid];
+   
+   items[mid] = items[first];
+   
+   items[first] = temp;
 }
 
 //no work below this point
